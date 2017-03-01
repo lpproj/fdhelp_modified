@@ -9,8 +9,13 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <malloc.h>
-#include <dir.h>
+#if defined(__TURBOC__)
+# include <alloc.h>
+# include <dir.h>
+#else
+# include <malloc.h>
+# include <direct.h>
+#endif
 #include "help_gui.h"
 #include "readfile.h"
 #include "unz\unzip.h"

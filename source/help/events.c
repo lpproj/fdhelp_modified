@@ -10,6 +10,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include "conioes.h"
 #include "help_gui.h"
 #define EVENTS_C
 #include "events.h"

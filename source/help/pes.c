@@ -8,7 +8,12 @@
 */
 
 #include <string.h>
-#include <malloc.h>
+#if defined(__TURBOC__)
+# include <alloc.h>
+#else
+# include <malloc.h>
+#endif
+#include "conioes.h"
 #include "pes.h"
 #include "help_gui.h"
 #include "catdefs.h"

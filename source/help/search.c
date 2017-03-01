@@ -1,8 +1,12 @@
 #include <string.h>
-#include <malloc.h>
+#if defined(__TURBOC__)
+# include <alloc.h>
+#else
+# include <malloc.h>
+#endif
 #include <stdarg.h>
 #include <ctype.h>
-#include "conio.h"
+#include "conioes.h"
 #include "help_htm.h"
 #include "parse.h"
 #include "search.h"

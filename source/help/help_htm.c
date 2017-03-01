@@ -23,9 +23,14 @@
 
 /* I N C L U D E S ---------------------------------------------------------- */
 
+#if defined(__TURBOC__)
+# include <dir.h>
+#else
+# include <direct.h>
+#endif
 #include <stdio.h>
 #include <string.h>
-#include "conio.h"
+#include "conioes.h"
 #include "help.h"
 #include "help_htm.h"
 #include "help_gui.h"
@@ -33,8 +38,6 @@
 #include "search.h"
 #include "catdefs.h"
 #include "readfile.h"
-
-#include <dir.h>
 
 /* F U N C T I O N S -------------------------------------------------------- */
 

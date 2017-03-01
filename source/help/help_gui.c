@@ -12,11 +12,15 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <malloc.h>
+#if defined(__TURBOC__)
+# include <alloc.h>
+#else
+# include <malloc.h>
+#endif
 #include <conio.h>
 #define HELP_GUI_C
 #include "help_gui.h"
-#include "conio.h"
+#include "conioes.h"
 #include "catdefs.h"
 
 /* F U N C T I O N S *******************************************************/

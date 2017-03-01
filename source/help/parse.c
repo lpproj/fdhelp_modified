@@ -10,7 +10,11 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <malloc.h>
+#if defined(__TURBOC__)
+# include <alloc.h>
+#else
+# include <malloc.h>
+#endif
 #include <dos.h>
 
 #include "pes.h"

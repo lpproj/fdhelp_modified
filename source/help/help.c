@@ -30,12 +30,17 @@
 #include <stdio.h>
 #include <string.h>
 #include <conio.h>
-#include <malloc.h>
-#include <dir.h>
+#if defined(__TURBOC__)
+# include <alloc.h>
+# include <dir.h>
+#else
+# include <malloc.h>
+# include <direct.h>
+#endif
 #include <dos.h>
 #include "catdefs.h"
 #include "help_gui.h"
-#include "conio.h"
+#include "conioes.h"
 #include "help.h"
 
 /* M A I N   M O D U L E ***************************************************/

@@ -1,4 +1,5 @@
 #include <string.h>
+#include "conioes.h"
 #include "events.h"
 #include "help_gui.h"
 #include "parse.h"
