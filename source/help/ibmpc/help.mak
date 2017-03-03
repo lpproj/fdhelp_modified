@@ -1,18 +1,21 @@
-# makefile for building DOS/V (TopView) version of HELP.EXE
+# makefile for building IBM PC version of HELP.EXE
 # with Turbo C 2.0/Turbo C++ 1.01
 
 CC = tcc
-CFLAGS = -ml -O -f- -I..
+CFLAGS = -ml -O -f- -I. -I.. -DIBMPC
 LD = tcc
 LDFLAGS = -ml -f-
+AS = tasm
+ASFLAGS = /Mx /jLOCALS /jJUMPS /m9 /dIBMPC
 
 .AUTODEPEND
 
 SPATH = ..\\
 OPATH = .\\
 
-ECHOTO = command /c $(SPATH)myechoto.bat
-RM = command /c $(SPATH)myrm.bat
+SHELL_C = command /c
+ECHOTO = $(SHELL_C) $(SPATH)myechoto.bat
+RM = $(SHELL_C) $(SPATH)myrm.bat
 
 .c.obj:
 	$(CC) $(CFLAGS) -c -o$@ $<
@@ -55,7 +58,7 @@ OBJS = $(OBJS01) $(OBJS02) $(OBJS03) $(OBJS04) $(OBJS05)
 OBJS_RSP = objs.rsp
 
 default:
-	@echo to build: make -fhelp_tc.mak
+	@echo to build: make -fhelp_tc.mak help.exe
 
 clean:
 	$(RM) $(OBJS01)
@@ -104,6 +107,9 @@ $(OPATH)search.obj: $(SPATH)search.c
 
 $(OPATH)utfcp.obj: $(SPATH)utfcp.c
 	$(CC) $(CFLAGS) -c -o$< $(SPATH)utfcp.c
+
+#$(OPATH)conioes.obj: conioes.asm
+#	$(AS) $(AFLAGS) $<, conioes.obj
 
 
 $(OBJS_RSP): $(OBJS) $(OBJS_C)
