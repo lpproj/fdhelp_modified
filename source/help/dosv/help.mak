@@ -2,11 +2,11 @@
 # with Turbo C 2.0/Turbo C++ 1.01
 
 CC = tcc
-CFLAGS = -ml -O -f- -I. -I.. -DIBMPC
+CFLAGS = -ml -O -f- -I. -I.. -DIBMPC -DTOPVIEW
 LD = tcc
 LDFLAGS = -ml -f-
 AS = tasm
-ASFLAGS = /Mx /jLOCALS /jJUMPS /m9 /dIBMPC
+ASFLAGS = /Mx /jLOCALS /jJUMPS /m9 /dIBMPC /dTOPVIEW
 
 .AUTODEPEND
 
@@ -66,6 +66,7 @@ clean:
 	$(RM) $(OBJS03)
 	$(RM) $(OBJS04)
 	$(RM) $(OBJS05)
+	$(RM) $(OBJS_C)
 	$(RM) $(OBJS_RSP) help.exe
 
 help.exe: $(OBJS) $(OBJS_C) $(LIBS) $(OBJS_RSP)
@@ -108,8 +109,8 @@ $(OPATH)search.obj: $(SPATH)search.c
 $(OPATH)utfcp.obj: $(SPATH)utfcp.c
 	$(CC) $(CFLAGS) -c -o$< $(SPATH)utfcp.c
 
-#$(OPATH)conioes.obj: conioes.asm
-#	$(AS) $(AFLAGS) $<, conioes.obj
+$(OPATH)conioes.obj: conioes.asm
+	$(AS) $(ASFLAGS) conioes.asm,$<
 
 
 $(OBJS_RSP): $(OBJS) $(OBJS_C)
