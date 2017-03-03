@@ -222,7 +222,7 @@ edit_int_field (struct event *ev, int ev_mask, int attr, int x, int y,
       if (!(ev->ev_type & EV_KEY))
 	break;
 
-      if (ev->key == 8 || ev->scan == 0x5300 || ev->scan == 0x53E0)	// Backspace || Del.
+      if (ev->key == 8 || IS_SCAN_DEL(ev->scan))	// Backspace || Del.
 	{
 	  (*n) /= 10;
 	}
@@ -291,7 +291,7 @@ enter_string (int x, int y, char *prompt, int maxlen, char *str, char *help)
 	  break;
 	}
 
-      if (ev.scan == 0x3B00 && help != 0)	// F1 - Help.
+      if (IS_SCAN_F1(ev.scan) && help != 0)	// F1 - Help.
 	{
 	  html_view (help);
 	}
@@ -330,19 +330,19 @@ edit_str_field (struct event *ev, int ev_mask, int attr, int x, int y,
       if (!(ev->ev_type & EV_KEY))
 	break;
 
-      if (ev->scan == 0x47E0 || ev->scan == 0x4700)	/* Home. */
+      if (IS_SCAN_HOME(ev->scan))	/* Home. */
 	{
 	  *pos = 0;
 	}
-      else if (ev->scan == 0x4FE0 || ev->scan == 0x4F00)	/* End. */
+      else if (IS_SCAN_END(ev->scan))	/* End. */
 	{
 	  *pos = strlen (str);
 	}
-      else if (*pos > 0 && (ev->scan == 0x4BE0 || ev->scan == 0x4B00))	/* Left. */
+      else if (*pos > 0 && IS_SCAN_LEFT(ev->scan))	/* Left. */
 	{
 	  (*pos)--;
 	}
-      else if (*pos < strlen (str) && (ev->scan == 0x4DE0 || ev->scan == 0x4D00))	/* Right. */
+      else if (*pos < strlen (str) && IS_SCAN_RIGHT(ev->scan))	/* Right. */
 	{
 	  (*pos)++;
 	}
@@ -354,7 +354,7 @@ edit_str_field (struct event *ev, int ev_mask, int attr, int x, int y,
 	  str[i - 1] = 0;
 	  (*pos)--;
 	}
-      else if (ev->scan == 0x5300 || ev->scan == 0x53E0)	/* Del. */
+      else if (IS_SCAN_DEL(ev->scan))	/* Del. */
 	{
 	  for (i = *pos; i < maxlen && str[i] != 0; i++)
 	    str[i] = str[i + 1];
@@ -567,7 +567,7 @@ searchbox (char *str)
 	  if (ev.key == 13)
 	    {
 	      ev.key = 0;
-	      ev.scan = 0x3B00;
+	      ev.scan = EV_SCAN_F1;
 	    }
 	}
       else if (focus == SEARCH_FULLSEARCH_RADIO)
@@ -623,7 +623,7 @@ searchbox (char *str)
 	  else if (ev.x >= x + 26 && ev.x <= x + 33 && ev.y == y + 10)
 	    {
 	      ev.key = 0;
-	      ev.scan = 0x3B00;
+	      ev.scan = EV_SCAN_F1; /* 0x3B00; */
 	    }
 	  else if (ev.x >= x + 6 &&
               ev.x <= x + strlen(fullstr)+9
@@ -669,13 +669,13 @@ searchbox (char *str)
 	    focus = SEARCH_FIRSTFOCUS;
 	}
 
-      if (ev.scan == 0xf00)	/* Shift+Tab */
+      if (IS_SCAN_SHIFT_TAB(ev.scan))	/* Shift+Tab */
 	{
 	  if ((focus--) == SEARCH_FIRSTFOCUS)
 	    focus = SEARCH_LASTFOCUS;
 	}
 
-      if (ev.scan == 0x3B00)	// F1 for help screen */
+      if (IS_SCAN_F1(ev.scan))	// F1 for help screen */
 	{
 	  char *buf2 = malloc (w * height * 2);	/* RP */
 	  if (buf == NULL)

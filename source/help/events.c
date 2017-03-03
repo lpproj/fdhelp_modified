@@ -67,38 +67,38 @@ processEvents (struct eventState *pes)
 	}
       else if (ev.key == 27)
 	return NAVIGATE_BACK;	/* Escape Key */
-      else if (ev.key == 9 || ev.scan == 0x4de0 || ev.scan == 0x4d00)
+      else if (ev.key == 9 || IS_SCAN_RIGHT(ev.scan))
 	tabkey (pes);
-      else if (ev.scan == 0xf00 || ev.scan == 0x4be0 || ev.scan == 0x4b00)
+      else if (IS_SCAN_SHIFT_TAB(ev.scan) || IS_SCAN_LEFT(ev.scan))
 	shifttabkey (pes);
-      else if (ev.scan == 0x50E0 || ev.scan == 0x5000)
+      else if (IS_SCAN_DOWN(ev.scan))
 	downkey (pes);
-      else if (ev.scan == 0x48E0 || ev.scan == 0x4800)
+      else if (IS_SCAN_UP(ev.scan))
 	upkey (pes);
-      else if ((ev.key == 8 && ev.scan == 0x0e08) ||
-	       ev.scan == 0x3000 || ev.scan == 0x9b00
+      else if ((ev.key == 8 && ev.scan == EV_SCAN_BS) ||
+	       IS_SCAN_ALT_B(ev.scan) || IS_SCAN_ALT_LEFT(ev.scan)
 	       || (ev.key == 4 && ev.scan == 4))
 	return NAVIGATE_BACK;	/* Backspace, Alt+B, Alt+Left Arrow */
-      else if (ev.scan == 0x2d00 || ev.scan == 0x6B00) /* Alt+F4 */
+      else if (IS_SCAN_ALT_X(ev.scan) || IS_SCAN_ALT_F4(ev.scan)) /* Alt+F4 */
 	return NAVIGATE_EXIT;
-      else if (ev.scan == 0x2e00)
+      else if (IS_SCAN_ALT_C(ev.scan))
 	return NAVIGATE_HOME;
-      else if (ev.scan == 0x2100 || ev.scan == 0x9d00
+      else if (IS_SCAN_ALT_C(ev.scan) || IS_SCAN_ALT_RIGHT(ev.scan)
 	       || (ev.key == 6 && ev.scan == 6))
 	return NAVIGATE_FORWARD;	/* Alt+Right Arrow */
-      else if (ev.scan == 0x3b00)
+      else if (IS_SCAN_F1(ev.scan))
 	return NAVIGATE_HELP;	/* F1 */
-      else if (ev.scan == 0x3f00 || (ev.key == 18 && ev.scan == 0x1312))
+      else if (IS_SCAN_F5(ev.scan) || (ev.key == 18 && IS_SCAN_CTRL_R(ev.scan)))
 	return NAVIGATE_REFRESH;	/* F5 or Ctrl+R */
-      else if (ev.scan == 0x1f00)	/* Alt+S */
+      else if (IS_SCAN_ALT_S(ev.scan))	/* Alt+S */
 	return NAVIGATE_SEARCH;
-      else if (ev.scan == 0x47E0 || ev.scan == 0x4700)
+      else if (IS_SCAN_HOME(ev.scan))
 	{			/* Home Key */
 	  pes->top = pes->body_start;
 	  pes->clink = 0;
 	}
-      else if (ev.scan == 0x49E0 || ev.scan == 0x4900 ||
-	       ev.scan == 0x99e0 || ev.scan == 0x9900)
+      else if (IS_SCAN_PGUP(ev.scan) ||
+	       IS_SCAN_ALT_PGUP(ev.scan))
 	{			/* (Alt+)PgUp. */
 	  if (pes->top != pes->body_start)
 	    {
@@ -107,7 +107,7 @@ processEvents (struct eventState *pes)
 	      pes->clink = 0;
 	    }
 	}
-      else if (ev.scan == 0x4FE0 || ev.scan == 0x4F00)
+      else if (IS_SCAN_END(ev.scan))
 	{			/* End */
 	  if (pes->bottom != pes->body_end)
 	    {
@@ -116,7 +116,7 @@ processEvents (struct eventState *pes)
 	      pes->clink = 0;
 	    }
 	}
-      else if (ev.scan == 0xa000)
+      else if (IS_SCAN_ALT_DOWN(ev.scan))
 	{			/* Alt+Down. */
 	  if (pes->bottom != pes->body_end)
 	    {
@@ -125,7 +125,7 @@ processEvents (struct eventState *pes)
 	      pes->clink = 0;
 	    }
 	}
-      else if (ev.scan == 0x9800)
+      else if (IS_SCAN_ALT_UP(ev.scan))
 	{			/* Alt+Up. */
 	  if (pes->top != pes->body_start)
 	    {
@@ -134,8 +134,8 @@ processEvents (struct eventState *pes)
 	      pes->clink = 0;
 	    }
 	}
-      else if (ev.scan == 0x51E0 || ev.scan == 0x5100 ||
-	       ev.scan == 0xa1e0 || ev.scan == 0xa100)
+      else if (IS_SCAN_PGDOWN(ev.scan) ||
+	       IS_SCAN_ALT_PGDOWN(ev.scan))
 	{			/* (Alt+)PgDn */
 	  if (pes->bottom != pes->body_end)
 	    {

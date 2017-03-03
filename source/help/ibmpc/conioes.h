@@ -149,4 +149,90 @@ extern "C"
 #define SK_CAPS_LOCK     0x4000
 #define SK_SYS_REQ       0x8000
 
+#define EV_SCAN_DEL	0x5300
+#define EV_SCAN_DELE	0x53E0
+#define EV_SCAN_F1		0x3B00
+#define EV_SCAN_F2		0x3C00
+#define EV_SCAN_F3		0x3D00
+#define EV_SCAN_F4		0x3E00
+#define EV_SCAN_ALT_F4	0x6B00
+#define EV_SCAN_F5		0x3F00
+#define EV_SCAN_HOME	0x4700
+#define EV_SCAN_HOMEE	0x47E0
+#define EV_SCAN_END	0x4F00
+#define EV_SCAN_ENDE	0x4FE0
+#define EV_SCAN_LEFT	0x4B00
+#define EV_SCAN_LEFTE	0x4BE0
+#define EV_SCAN_ALT_LEFTE	0x9B00
+#define EV_SCAN_RIGHT	0x4D00
+#define EV_SCAN_RIGHTE	0x4DE0
+#define EV_SCAN_ALT_RIGHTE	0x9D00
+#define EV_SCAN_UP		0x4800
+#define EV_SCAN_UPE		0x48E0
+#define EV_SCAN_CTRL_UP	0x8D00
+#define EV_SCAN_CTRL_UPE	0x8DE0
+#define EV_SCAN_ALT_UPE	0x9800
+#define EV_SCAN_DOWN	0x5000
+#define EV_SCAN_DOWNE	0x50E0
+#define EV_SCAN_CTRL_DOWN	0x9100
+#define EV_SCAN_CTRL_DOWNE	0x91E0
+#define EV_SCAN_ALT_DOWNE	0xA000
+
+#define EV_SCAN_SHIFT_TAB	0x0F00
+
+#define EV_SCAN_BS		0x0E08
+#define EV_SCAN_CTRL_BS	0x0E7F
+#define EV_SCAN_ALT_BS	0x0E00
+
+#define EV_SCAN_PGUP	0x4900
+#define EV_SCAN_SHIFT_PGUP	0x4939
+#define EV_SCAN_CTRL_PGUP	0x8400
+#define EV_SCAN_PGUPE	0x49E0
+#define EV_SCAN_CTRL_PGUPE	0x84E0
+#define EV_SCAN_ALT_PGUPE	0x9900
+#define EV_SCAN_PGDOWN	0x5100
+#define EV_SCAN_SHIFT_PGDOWN	0x5133
+#define EV_SCAN_CTRL_PGDOWN	0x7600
+#define EV_SCAN_PGDOWNE	0x51E0
+#define EV_SCAN_CTRL_PGDOWNE	0x76E0
+#define EV_SCAN_ALT_PGDOWNE	0xA100
+
+
+#define IS_SCAN_DEL(s)		((s)==EV_SCAN_DEL || (s)==EV_SCAN_DELE)
+#define IS_SCAN_HOME(s)		((s)==EV_SCAN_HOME || (s)==EV_SCAN_HOMEE)
+#define IS_SCAN_END(s)		((s)==EV_SCAN_END || (s)==EV_SCAN_ENDE)
+#define IS_SCAN_LEFT(s)		((s)==EV_SCAN_LEFT || (s)==EV_SCAN_LEFTE)
+#define IS_SCAN_ALT_LEFT(s)	((s)==EV_SCAN_ALT_LEFTE)
+#define IS_SCAN_RIGHT(s)	((s)==EV_SCAN_RIGHT || (s)==EV_SCAN_RIGHTE)
+#define IS_SCAN_ALT_RIGHT(s)	((s)==EV_SCAN_ALT_RIGHTE)
+#define IS_SCAN_UP(s)		((s)==EV_SCAN_UP || (s)==EV_SCAN_UPE)
+#define IS_SCAN_ALT_UP(s)	((s)==EV_SCAN_ALT_UPE)
+#define IS_SCAN_DOWN(s)		((s)==EV_SCAN_DOWN || (s)==EV_SCAN_DOWNE)
+#define IS_SCAN_ALT_DOWN(s)	((s)==EV_SCAN_ALT_DOWNE)
+#define IS_SCAN_SHIFT_TAB(s)	((s)==EV_SCAN_SHIFT_TAB)
+#define IS_SCAN_BS(s)		((s)==EV_SCAN_BS)
+
+#define IS_SCAN_F1(s)		((s)==EV_SCAN_F1)
+#define IS_SCAN_ALT_F4(s)	((s)==EV_SCAN_ALT_F4)
+#define IS_SCAN_F5(s)		((s)==EV_SCAN_F5)
+
+#define IS_SCAN_PGUP(s)		((s)==EV_SCAN_PGUP || (s)==EV_SCAN_PGUPE)
+#define IS_SCAN_SHIFT_PGUP(s)	((s)==EV_SCAN_SHIFT_PGUP)
+#define IS_SCAN_CTRL_PGUP(s)		((s)==EV_SCAN_CTRL_PGUP || (s)==EV_SCAN_CTRL_PGUPE)
+#define IS_SCAN_ALT_PGUP(s)	((s)==EV_SCAN_ALT_PGUPE)
+
+#define IS_SCAN_PGDOWN(s)		((s)==EV_SCAN_PGDOWN || (s)==EV_SCAN_PGDOWNE)
+#define IS_SCAN_SHIFT_PGDOWN(s)	((s)==EV_SCAN_SHIFT_PGDOWN)
+#define IS_SCAN_CTRL_PGDOWN(s)		((s)==EV_SCAN_CTRL_PGDOWN || (s)==EV_SCAN_CTRL_PGDOWNE)
+#define IS_SCAN_ALT_PGDOWN(s)	((s)==EV_SCAN_ALT_PGDOWNE)
+
+#define IS_SCAN_ALT_B(s)	((s)==0x3000)
+#define IS_SCAN_ALT_C(s)	((s)==0x2E00)
+#define IS_SCAN_ALT_F(s)	((s)==0x2100)
+#define IS_SCAN_CTRL_R(s)	((s)==0x1312)
+#define IS_SCAN_ALT_S(s)	((s)==0x1F00)
+#define IS_SCAN_ALT_X(s)	((s)==0x2D00)
+
+
+
 #endif
