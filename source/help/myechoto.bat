@@ -29,7 +29,7 @@ shift
 if "%1" == "" goto help
 set MYECHO_OF=%1
 if not "%MYECHO_A%" == "" goto loc_lp1
-if exist "%MYECHO_OF%" del "%MYECHO_OF%"
+if exist %MYECHO_OF% del %MYECHO_OF%
 
 :loc_lp1
 shift
