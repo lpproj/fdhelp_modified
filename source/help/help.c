@@ -43,6 +43,10 @@
 #include "conioes.h"
 #include "help.h"
 
+#if !defined(DEFAULT_ASCII_EXTENDED_CHARS)
+# define DEFAULT_ASCII_EXTENDED_CHARS 1
+#endif
+
 /* M A I N   M O D U L E ***************************************************/
 
 int
@@ -60,7 +64,7 @@ main (int argc, char *argv[])
   int oldcursorx = wherex (), oldcursory = wherey ();
   int i;			/* counter for loop */
   int forcemono = 0, fancyscheme = 0;
-  int AsciiExtendedChars = 1;
+  int AsciiExtendedChars = DEFAULT_ASCII_EXTENDED_CHARS;
   int codepage = 0;
 
   cat = catopen("htmlhelp", 0);
@@ -114,7 +118,11 @@ main (int argc, char *argv[])
 
   if (getenv ("HELPCMD"))
     {
-      if (strstr (getenv ("HELPCMD"), "/A"))
+      if (strstr (getenv ("HELPCMD"), "/A1"))
+	AsciiExtendedChars = 1;
+      else if (strstr (getenv ("HELPCMD"), "/A0"))
+	AsciiExtendedChars = 0;
+      else if (strstr (getenv ("HELPCMD"), "/A"))
 	AsciiExtendedChars = 0;
       if (strstr (getenv ("HELPCMD"), "/M"))
 	forcemono = 1;
@@ -142,6 +150,10 @@ main (int argc, char *argv[])
 
 	    case 'a':
 	    case 'A':
+	      if (argv[i][2] == '1' && argv[i][3] == 0)
+		AsciiExtendedChars = 1;
+	      if (argv[i][2] == '0' && argv[i][3] == 0)
+		AsciiExtendedChars = 0;
 	      if (argv[i][2] == 0)
 		AsciiExtendedChars = 0;
 	      break;
@@ -300,6 +312,8 @@ main (int argc, char *argv[])
       strcpy (Border22if, "+-+( )+-+");
       BarBlock1 = '.';
       BarBlock2 = '#';
+      BarUpArrow = '^';
+      BarDownArrow = 'v';
     }
   show_mouse ();
   move_mouse (80, 25);
