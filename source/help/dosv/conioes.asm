@@ -110,6 +110,19 @@ _conio_init	PROC
 		mov	_ScreenSegment, 0B000h
                 mov     _MonoOrColor,   1 ; RP
     @@skip1:
+
+IFDEF TOPVIEW
+		push	di
+		push	es
+		les	di, dword ptr [_ScreenOffset]
+		mov	ah, 0FEh
+		int	10h
+		mov	_ScreenOffset, di
+		mov	_ScreenSegment, es
+		pop	es
+		pop	di
+ENDIF
+
 		push	ds
 		mov	ax, 0
 		mov	ds, ax
@@ -236,6 +249,75 @@ _conio_exit	ENDP
 
 
 ;----------------------------------------------------------------
+IFDEF TOPVIEW
+
+topview_after_repBX_stosw	PROC	NEAR
+		push	ax
+		push	cx
+		push	di
+		mov	cx, bx
+		pushf
+		pop	ax
+		test	ah, 4		; check DF
+		jz	@@adj_df0
+		add	di, 2		; ajust di if DF = 1
+		jmp	short @@l2
+    @@adj_df0:
+		sub	di, cx		; adjust di if DF = 0
+		sub	di, cx
+    @@l2:
+		mov	ah, 0FFh
+		int	10h
+		pop	di
+		pop	cx
+		pop	ax
+		ret
+topview_after_repBX_stosw	ENDP
+
+
+TOPVIEW_STOSW	MACRO
+		push	bx
+		mov	bx, 1
+		stosw
+		call	topview_after_repBX_stosw
+		pop	bx
+ENDM
+
+TOPVIEW_REP_STOSW	MACRO
+		push	bx
+		mov	bx, cx
+		rep	stosw
+		call	topview_after_repBX_stosw
+		pop	bx
+ENDM
+
+TOPVIEW_REP_MOVSW	MACRO
+		push	bx
+		mov	bx, cx
+		rep	movsw
+		call	topview_after_repBX_stosw
+		pop	bx
+ENDM
+
+ELSE
+
+; no topview interface
+
+TOPVIEW_STOSW	MACRO
+		stosw
+ENDM
+
+TOPVIEW_REP_STOSW	MACRO
+		rep	stosw
+ENDM
+
+TOPVIEW_REP_MOVSW	MACRO
+		rep	movsw
+ENDM
+
+ENDIF	; TOPVIEW
+
+;----------------------------------------------------------------
 
 
 _show_mouse	PROC
@@ -353,7 +435,7 @@ _write_char	PROC
 
                 mov     al, Char
 		mov	ah, Attribute
-		stosw
+		TOPVIEW_STOSW
 
 		pop	si
 		pop	di
@@ -400,7 +482,7 @@ _write_string	PROC
 		mov	ah, Attribute
 		jmp	@@first
     @@next:
-		stosw
+		TOPVIEW_STOSW
     @@first:
 		lodsb
 		cmp	al, 0
@@ -511,7 +593,7 @@ _load_window	PROC
 		
     @@next_row:
 		mov	cl, bl
-                rep     movsw
+		TOPVIEW_REP_MOVSW
 		add	di, dx
 		dec	bh
 		jne	@@next_row
@@ -570,7 +652,7 @@ _clear_window	PROC
 
     @@next_row:
 		mov	cl, bl
-                rep     stosw
+		TOPVIEW_REP_STOSW
 		add	di, dx
 		dec	bh
 		jne	@@next_row
@@ -643,7 +725,7 @@ _scroll_window	PROC
 	
     @@next_row:
 		mov	cl, bh
-                rep     movsw
+		TOPVIEW_REP_MOVSW
 		add	di, dx
 		add	si, dx
 		dec	bl
@@ -655,7 +737,7 @@ _scroll_window	PROC
 
     @@clr_row:
 		mov	cl, bh
-                rep     stosw
+		TOPVIEW_REP_STOSW
 		add	di, dx
 		dec	bl
 		jne		@@clr_row
@@ -715,31 +797,31 @@ _border_window	PROC
 		mov	ah, Attribute
 
 		lodsb			; Upper row
-		stosw
+		TOPVIEW_STOSW
 		mov	cl, bl
 		lodsb
-                rep     stosw
+		TOPVIEW_REP_STOSW
 		lodsb
-		stosw
+		TOPVIEW_STOSW
 		add	di, dx
 		cmp	bh, 00
 		je	@@NoMiddleRows
 	
     @@next_row:
 		lodsb			; All rows in the middle
-		stosw
+		TOPVIEW_STOSW
 		mov	cl, bl
 		lodsb
 		cmp	al, 00
 		je	@@NoFill
-                rep     stosw
+		TOPVIEW_REP_STOSW
 		jmp	@@FillDone
     @@NoFill:
 		add	di, cx
 		add	di, cx
     @@FillDone:
 		lodsb
-		stosw
+		TOPVIEW_STOSW
 		add	di, dx
 		sub	si, 03
 		dec	bh
@@ -748,12 +830,12 @@ _border_window	PROC
  @@NoMiddleRows:
 		add	si, 03		; Bottom row
 		lodsb
-		stosw
+		TOPVIEW_STOSW
 		mov	cl, bl
 		lodsb
-                rep     stosw
+		TOPVIEW_REP_STOSW
 		lodsb
-		stosw
+		TOPVIEW_STOSW
 
 		pop	si
 		pop	di
