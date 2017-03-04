@@ -7,6 +7,9 @@ LD = tcc
 LDFLAGS = -ml -f-
 AS = tasm
 ASFLAGS = /Mx /jLOCALS /jJUMPS /m9 /dIBMPC /dTOPVIEW
+#AS = ml
+#ASFLAGS = -c -Cx -DIBMPC -DTOPVIEW
+
 
 .AUTODEPEND
 
@@ -109,8 +112,14 @@ $(OPATH)search.obj: $(SPATH)search.c
 $(OPATH)utfcp.obj: $(SPATH)utfcp.c
 	$(CC) $(CFLAGS) -c -o$< $(SPATH)utfcp.c
 
+# tasm
 $(OPATH)conioes.obj: conioes.asm
+	$(RM) $<
 	$(AS) $(ASFLAGS) conioes.asm,$<
+
+# ml.exe (masm 6)
+#$(OPATH)conioes.obj: conioes.asm
+#	$(AS) $(ASFLAGS) -Fo$< conioes.asm
 
 
 $(OBJS_RSP): $(OBJS) $(OBJS_C)
