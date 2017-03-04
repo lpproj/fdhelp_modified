@@ -9,6 +9,8 @@
 #ifndef _CONIO_H_INCLUDED
 #define _CONIO_H_INCLUDED
 
+#define DEFAULT_ASCII_EXTENDED_CHARS 0
+
 /* The middle character will be
    used to fill the window space */
 #ifdef NOTEXTERN_IN_CONIO
