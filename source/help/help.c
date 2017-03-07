@@ -118,10 +118,8 @@ main (int argc, char *argv[])
 
   if (getenv ("HELPCMD"))
     {
-      if (strstr (getenv ("HELPCMD"), "/A1"))
+      if (strstr (getenv ("HELPCMD"), "/A-"))
 	AsciiExtendedChars = 1;
-      else if (strstr (getenv ("HELPCMD"), "/A0"))
-	AsciiExtendedChars = 0;
       else if (strstr (getenv ("HELPCMD"), "/A"))
 	AsciiExtendedChars = 0;
       if (strstr (getenv ("HELPCMD"), "/M"))
@@ -150,10 +148,8 @@ main (int argc, char *argv[])
 
 	    case 'a':
 	    case 'A':
-	      if (argv[i][2] == '1' && argv[i][3] == 0)
+	      if (argv[i][2] == '-' && argv[i][3] == 0)
 		AsciiExtendedChars = 1;
-	      if (argv[i][2] == '0' && argv[i][3] == 0)
-		AsciiExtendedChars = 0;
 	      if (argv[i][2] == 0)
 		AsciiExtendedChars = 0;
 	      break;
