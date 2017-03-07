@@ -2,11 +2,11 @@
 # with Turbo C 2.0/Turbo C++ 1.01
 
 CC = tcc
-CFLAGS = -ml -O -f- -I. -I.. -DIBMPC -DTOPVIEW
+CFLAGS = -ml -O -f- -I. -I.. -DDOSV
 LD = tcc
 LDFLAGS = -ml -f-
 AS = tasm
-ASFLAGS = /Mx /jLOCALS /jJUMPS /m9 /dIBMPC /dTOPVIEW
+ASFLAGS = /Mx /jLOCALS /jJUMPS /m9 /dDOSV
 #AS = ml
 #ASFLAGS = -c -Cx -DIBMPC -DTOPVIEW
 
@@ -54,6 +54,7 @@ OBJS05 = \
 	$(OPATH)unzip.obj 
 
 OBJS_C = \
+	$(OPATH)conioesv.obj \
 	$(OPATH)conioes.obj 
 
 OBJS = $(OBJS01) $(OBJS02) $(OBJS03) $(OBJS04) $(OBJS05)
@@ -111,6 +112,10 @@ $(OPATH)search.obj: $(SPATH)search.c
 
 $(OPATH)utfcp.obj: $(SPATH)utfcp.c
 	$(CC) $(CFLAGS) -c -o$< $(SPATH)utfcp.c
+
+$(OPATH)conioesv.obj: conioesv.c
+	$(CC) $(CFLAGS) -c -o$< conioesv.c
+
 
 # tasm
 $(OPATH)conioes.obj: conioes.asm

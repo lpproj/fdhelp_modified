@@ -9,13 +9,22 @@
 #ifndef _CONIO_H_INCLUDED
 #define _CONIO_H_INCLUDED
 
-#define DEFAULT_ASCII_EXTENDED_CHARS 0
+#if defined(DOSV)
+# if !defined(IBMPC)
+#  define IBMPC 1
+# endif
+# if !defined(TOPVIEW)
+#  define TOPVIEW 1
+# endif
+#endif
+
+#define DEFAULT_ASCII_EXTENDED_CHARS 1
 
 /* The middle character will be
    used to fill the window space */
 #ifdef NOTEXTERN_IN_CONIO
-char *Border22f = "…Õª∫ ∫»Õº";
-char *Border22if = "ÃÕπ∫ ∫»Õº";
+char *Border22f = "\xC9\xCD\xBB\xBA \xBA\xC8\xCD\xBC"; /* "…Õª∫ ∫»Õº"; */
+char *Border22if = "\xCC\xCD\xB9\xBA \xBA\xC8\xCD\xBC"; /* "ÃÕπ∫ ∫»Õº"; */
 char BarBlock1 = 176;
 char BarBlock2 = 178;
 char BarUpArrow = 24;		/* '' */

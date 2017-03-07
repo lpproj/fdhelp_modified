@@ -7,6 +7,12 @@
 ;
 ;   Updated for masm by RP. Also added MONO mode checking.
 
+IFDEF DOSV
+    IFNDEF TOPVIEW
+TOPVIEW		EQU	1
+    ENDIF
+ENDIF
+
 .MODEL COMPACT
 .DATA
 
@@ -37,7 +43,7 @@ ExtendedKeyb    DB   ?  ;
 
 .CODE
 
-PUBLIC	_conio_init
+PUBLIC	_conio_init2
 PUBLIC	_conio_exit
 PUBLIC	_show_mouse
 PUBLIC	_hide_mouse
@@ -73,7 +79,7 @@ Hide_Mouse	MACRO
 
 ;----------------------------------------------------------------
 
-_conio_init	PROC
+_conio_init2	PROC
      forcemono  EQU     [bp+06h]
 
 		push	bp
@@ -96,6 +102,12 @@ _conio_init	PROC
                 mov     al, oldvidmod   ; check if it is already in text
                 cmp     al, 03h         ; mode - colour.
                 je      @@Color
+                cmp     al, 02h         ; mode - CGA non-bursted colour.
+                je      @@Color
+IFDEF DOSV
+                cmp     al, 70h         ; mode - DOS/V V-Text mode
+                je      @@Color
+ENDIF
     @@Reset:
                 mov     ax, 0003h       ; If unknown set Color
                 int     10h
@@ -215,7 +227,7 @@ ENDIF
 		pop	es
 		pop	bp
 		retf
-_conio_init	ENDP
+_conio_init2	ENDP
 
 ;----------------------------------------------------------------
 
