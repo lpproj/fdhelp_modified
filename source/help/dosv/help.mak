@@ -10,6 +10,7 @@ ASFLAGS = /Mx /jLOCALS /jJUMPS /m9 /dDOSV
 #AS = ml
 #ASFLAGS = -c -Cx -DIBMPC -DTOPVIEW
 
+UPX = upx --best --8086
 
 .AUTODEPEND
 
@@ -62,7 +63,8 @@ OBJS = $(OBJS01) $(OBJS02) $(OBJS03) $(OBJS04) $(OBJS05)
 OBJS_RSP = objs.rsp
 
 default:
-	@echo to build: make -fhelp_tc.mak help.exe
+	@echo to build HELP.EXE : make -fhelp_tc.mak exe
+	@echo compress with upx : make -fhelp_tc.mak upx
 
 clean:
 	$(RM) $(OBJS01)
@@ -71,7 +73,16 @@ clean:
 	$(RM) $(OBJS04)
 	$(RM) $(OBJS05)
 	$(RM) $(OBJS_C)
-	$(RM) $(OBJS_RSP) help.exe
+	$(RM) $(OBJS_RSP) help.exe help_upx.exe
+
+
+upx: help_upx.exe
+
+exe: help.exe
+
+help_upx.exe: help.exe
+	$(RM) help_upx.exe
+	$(UPX) -o help_upx.exe help.exe
 
 help.exe: $(OBJS) $(OBJS_C) $(LIBS) $(OBJS_RSP)
 	$(LD) $(LDFLAGS) -ehelp.exe @$(OBJS_RSP)
