@@ -750,7 +750,12 @@ void drawmenu (void)
    /* Back */
    strncpy(bottomstr, hcatMenuBack, HCAT_MAX_BOTTOMMENU);
    bottomstr[HCAT_MAX_BOTTOMMENU] = '\0';
+#if 1
+   write_string (BORDER_TEXT_COLOR, X + 3, H, "   ");
+   write_char (BORDER_TEXT_COLOR, X + 3+1, H, BarLeftArrow);
+#else
    write_string (BORDER_TEXT_COLOR, X + 3, H, " \x1B ");
+#endif
    write_string (BORDER_TEXT_COLOR, X + 3+3, H, bottomstr);
    write_string (BORDER_TEXT_COLOR, X + 3+3+strlen(bottomstr), H, " ");
    /* Forward */

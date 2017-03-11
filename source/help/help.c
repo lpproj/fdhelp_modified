@@ -310,6 +310,8 @@ main (int argc, char *argv[])
       BarBlock2 = '#';
       BarUpArrow = '^';
       BarDownArrow = 'v';
+      BarLeftArrow = '<';
+      BarRightArrow = '>';
     }
   show_mouse ();
   move_mouse (80, 25);

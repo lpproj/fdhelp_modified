@@ -29,6 +29,8 @@ char BarBlock1 = 176;
 char BarBlock2 = 178;
 char BarUpArrow = 24;		/* '' */
 char BarDownArrow = 25;		/* '' */
+char BarLeftArrow = 27;
+char BarRightArrow = 26;
 #else
 extern const char *Border22f;
 extern const char *Border22if;
@@ -36,6 +38,8 @@ extern char BarBlock1;
 extern char BarBlock2;
 extern char BarUpArrow;
 extern char BarDownArrow;
+extern char BarLeftArrow;
+extern char BarRightArrow;
 #endif
 
 /* Foreground colours */

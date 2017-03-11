@@ -28,6 +28,8 @@ void __CON_FUNC conio_init (int force_mono)
 			BarBlock2 = 0x14;
 			BarUpArrow = 0x1c;
 			BarDownArrow = 0x07;
+			BarLeftArrow = 0x1f;
+			BarRightArrow = 0x1e;
 		}
 	}
 	
