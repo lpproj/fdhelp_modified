@@ -262,6 +262,8 @@ main (int argc, char *argv[])
 	save_window (X, Y, W, H, oldscreen);
     }
 
+  move_cursor (2, ScreenHeight - 1);
+
   if (MonoOrColor == COLOR_MODE && fancyscheme == 0)
     {
       TEXT_COLOR = C_TEXT_COLOR;
@@ -325,7 +327,7 @@ main (int argc, char *argv[])
       free (oldscreen);
     }
   conio_exit ();
-  gotoxy (oldcursorx, oldcursory);
+  move_cursor (oldcursorx, oldcursory);
 
   return 0;
 }
