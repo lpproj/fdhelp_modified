@@ -40,6 +40,15 @@ _LastMouseBtns	DW   ?	;
 OriginalTimer1	DW   ?	;
 OriginalTimer2	DW   ?	;
 ExtendedKeyb    DB   ?  ;
+IFDEF TOPVIEW
+PUBLIC _IsTopView
+PUBLIC _IsDOSVText
+_IsTopView	db   ?
+_IsDOSVText	db   ?
+ENDIF ; TOPVIEW
+IFDEF DOSV
+reserve_bottom_row	db   ?
+ENDIF ; DOSV
 
 .CODE
 
@@ -88,6 +97,13 @@ _conio_init2	PROC
 		push	si
 		push	di
 
+IFDEF TOPVIEW
+		mov	_IsTopView, 0
+		mov	_IsDOSVText, 0
+ENDIF
+IFDEF DOSV
+		mov	reserve_bottom_row, 0
+ENDIF
                 mov     ah,0Fh          ; Get current video mode
 		int	10h
                 mov     oldvidmod, al   ; RP store so that it can be restored
@@ -129,8 +145,35 @@ IFDEF TOPVIEW
 		les	di, dword ptr [_ScreenOffset]
 		mov	ah, 0FEh
 		int	10h
+		mov	ax, es
+		cmp	ax, _ScreenSegment
+		jne	@@topview
+		cmp	di, _ScreenOffset
+		je	@@topview_chk_exit
+    @@topview:
+		mov	_IsTopView, 1
 		mov	_ScreenOffset, di
 		mov	_ScreenSegment, es
+    IFDEF DOSV
+		mov	ax, 4900h	; check DOS/V disp.sys is installed
+		mov	bx, -1
+		int	15h
+		test	ah, ah
+		jnz	@@topview_chk_exit
+		test	bl, bl
+		jnz	@@topview_chk_exit
+		; DOS/V DBCS text mode
+		mov	_IsDOSVText, 1
+		mov	ax, 1D02h	; BX = get rows of reserved lines
+		xor	bx, bx
+		int	10h
+		; if BX == 0 (not reserved by BIOS), reserve_bottom_row = 1
+		cmp	bl, 1
+		sbb	bl, bl
+		and	bl, 1
+		mov	reserve_bottom_row, bl
+    ENDIF ; DOSV
+    @@topview_chk_exit:
 		pop	es
 		pop	di
 ENDIF
@@ -142,6 +185,9 @@ ENDIF
 		mov	al, [bx]
 		pop	ds
 		inc	al
+IFDEF DOSV
+		sub	al, reserve_bottom_row
+ENDIF ; DOSV
 		mov	_ScreenHeight, al
 		mov	ah,0Fh
 		int	10h

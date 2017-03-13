@@ -105,6 +105,11 @@ extern unsigned int const MouseInstalled;
 extern unsigned int const WheelSupported;
 extern unsigned char const MonoOrColor;
 
+#if defined(TOPVIEW)
+extern unsigned char const IsTopView;
+extern unsigned char const IsDOSVText;
+#endif
+
 #define COLOR_MODE 0
 #define MONO_MODE  1
 
@@ -118,7 +123,7 @@ extern "C"
    below
 */
 #define __CON_FUNC far
-#define __CON_DATA far
+#define __CON_DATA far cdecl
 
   void __CON_FUNC conio_init (int force_mono);
   void __CON_FUNC conio_exit (void);
