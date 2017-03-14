@@ -22,6 +22,7 @@
 /* Version: Use this to keep the /? command's display of the version up to
             date. Enclose within double-quotes. */
 #define HTML_HELP_VERSION "5.3.3"
+#define HTML_HELP_FIXLEVEL "fix1"
 
 /* I N C L U D E S *********************************************************/
 
@@ -467,7 +468,11 @@ show_usage (void)
           "%s%s%s%s%s%s%s%s%s%s%s"
           "%s"
           "%s%s%s%s%s",
-     hcatProgramName, " " HTML_HELP_VERSION "\n\n"
+     hcatProgramName, " " HTML_HELP_VERSION
+#if defined(HTML_HELP_FIXLEVEL)
+	  " " HTML_HELP_FIXLEVEL
+#endif
+	  "\n\n"
 	  "HELP [options] [topic]\n\n",
 	  hcatBasicOptions, ":\n"
 	  "  topic            ", hcatUsageTopic, "\n"
