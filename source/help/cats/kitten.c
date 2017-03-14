@@ -190,7 +190,7 @@ kittenopen(char *name)
 
   /* 'flag' is completely ignored here. */
 
-  char *catfile;		        /* full path to the msg _kitten_catalog */
+  char *catfile = NULL;	        /* full path to the msg _kitten_catalog */
   char *nlsptr;				/* ptr to NLSPATH */
   char *lang;                           /* ptr to LANG */
   
@@ -253,7 +253,7 @@ kittenopen(char *name)
       return (-1);
     }
 
-  while (nlsptr != NULL)
+  while (*nlsptr)
     {
       char *tok = strchr(nlsptr, ';');
       int toklen;
@@ -261,6 +261,11 @@ kittenopen(char *name)
       if (tok == NULL) tok = nlsptr + strlen(nlsptr);
       toklen=tok-nlsptr;
       catfile = malloc(toklen+1+strlen(name)+1+strlen(lang)+1);
+      if (catfile == NULL)
+        {
+          /* printf("memory allocation faiure in kittenopen().\n"); */
+          return (-1);
+        }
       /* Try to find the _kitten_catalog file in each path from NLSPATH */
 
       /* Rule #1: %NLSPATH%\%LANG%\cat */
@@ -271,6 +276,7 @@ kittenopen(char *name)
       _kitten_catalog = catread (catfile);
       if (_kitten_catalog)
 	{
+	  if (catfile) free (catfile);
 	  return (_kitten_catalog);
 	}
 
@@ -282,6 +288,7 @@ kittenopen(char *name)
 
       if (_kitten_catalog)
 	{
+	  if (catfile) free (catfile);
 	  return (_kitten_catalog);
 	}
 
@@ -297,13 +304,20 @@ kittenopen(char *name)
 	  _kitten_catalog = catread (catfile);
 	  if (_kitten_catalog)
 	    {
+	      if (catfile) free (catfile);
 	      return (_kitten_catalog);
 	    }
         }
 
+      if (catfile)
+        {
+          free(catfile);
+          catfile = NULL;
+        }
+
       /* Grab next tok for the next while iteration */
       nlsptr = tok;
-      if (nlsptr) nlsptr++;
+      if (nlsptr && *nlsptr != '\0') nlsptr++;
       
     } /* while tok */
 
