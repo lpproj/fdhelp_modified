@@ -14,6 +14,7 @@ UPX = upx --best --8086
 
 SPATH = ..\\
 OPATH = .\\
+CATSPATH = $(SPATH)cats\\
 
 SHELL_C = command /c
 ECHOTO = $(SHELL_C) $(SPATH)myechoto.bat
@@ -25,9 +26,12 @@ RM = $(SHELL_C) $(SPATH)myrm.bat
 .cpp.obj:
 	$(CC) $(CFLAGS) -c -o$@ $<
 
+#LIBS = \
+#	$(SPATH)unz\\zlib_l.lib \
+#	$(SPATH)cats\\catdb.lib
+
 LIBS = \
 	$(SPATH)unz\\zlib_l.lib \
-	$(SPATH)cats\\catdb.lib
 
 
 OBJS01 = \
@@ -52,10 +56,13 @@ OBJS05 = \
 	$(OPATH)ioapi.obj \
 	$(OPATH)unzip.obj 
 
+OBJS_CAT = \
+	$(OPATH)kitten.obj
+
 OBJS_C = \
 	$(OPATH)conioes.obj 
 
-OBJS = $(OBJS01) $(OBJS02) $(OBJS03) $(OBJS04) $(OBJS05)
+OBJS = $(OBJS01) $(OBJS02) $(OBJS03) $(OBJS04) $(OBJS05) $(OBJS_CAT)
 
 OBJS_RSP = objs.rsp
 
@@ -68,7 +75,7 @@ clean:
 	$(RM) $(OBJS02)
 	$(RM) $(OBJS03)
 	$(RM) $(OBJS04)
-	$(RM) $(OBJS05)
+	$(RM) $(OBJS05) $(OBJS_CAT)
 	$(RM) $(OBJS_RSP) help.exe help_upx.exe
 
 upx: help_upx.exe
@@ -119,6 +126,9 @@ $(OPATH)search.obj: $(SPATH)search.c
 $(OPATH)utfcp.obj: $(SPATH)utfcp.c
 	$(CC) $(CFLAGS) -c -o$< $(SPATH)utfcp.c
 
+$(OPATH)kitten.obj: $(CATSPATH)kitten.c
+	$(CC) $(CFLAGS) -I$(CATSPATH)  -c -o$< $(CATSPATH)kitten.c
+
 #$(OPATH)conioes.obj: conioes.asm
 #	$(AS) $(AFLAGS) $<, conioes.obj
 
@@ -130,7 +140,7 @@ $(OBJS_RSP): $(OBJS) $(OBJS_C)
 	$(ECHOTO) -a $(OBJS_RSP) $(OBJS03)
 	$(ECHOTO) -a $(OBJS_RSP) $(OBJS04)
 	$(ECHOTO) -a $(OBJS_RSP) $(OBJS05)
-	$(ECHOTO) -a $(OBJS_RSP) $(OBJS_C)
+	$(ECHOTO) -a $(OBJS_RSP) $(OBJS_C) $(OBJS_CAT)
 	$(ECHOTO) -a $(OBJS_RSP) $(LIBS)
 
 
