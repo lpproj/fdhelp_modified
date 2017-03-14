@@ -1035,6 +1035,7 @@ _get_event	PROC
     @@loop_tail:
 		test	flags, EV_NONBLOCK
                 jnz     @@break_out
+		int	28h			; yield
 		jmp	@@main_loop
 
     @@break_out:
