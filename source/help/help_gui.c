@@ -65,7 +65,7 @@ message_box (int borderattr, int msgattr, int btnattr, const char *msg)
 
   x = (W - w) / 2 + 1;
 
-  buf = malloc (4 * W * 2);
+  buf = malloc (savewindowsize (w, h));
   if (buf)
     save_window (x, y, w, h, buf);
 
@@ -125,7 +125,7 @@ get_keys (unsigned short *keys, int num_keys)
   if (tmp == 0)
     return 0;
 
-  buf = malloc (H * W * 2);
+  buf = malloc (savewindowsize (w, h));
   if (buf != 0)
     save_window (x, y, w, h, buf);
 
@@ -262,7 +262,7 @@ enter_string (int x, int y, char *prompt, int maxlen, char *str, char *help)
   w = strlen (prompt) + 4 + w2;	/* changed 5 to 4 - RP */
   x2 = x + strlen (prompt) + 3;
 
-  buf = malloc (w * 3 * 2);	/* RP */
+  buf = malloc (savewindowsize (w, 3));	/* RP */
   if (buf == NULL)
     return 0;
 
@@ -466,7 +466,7 @@ searchbox (char *str)
   xEditBox = x + strlen (prompt) + 3;
   wEditBox = w - strlen (prompt) - 4;
 
-  buf = malloc (w * height * 2);	/* RP */
+  buf = malloc (savewindowsize (w, height));	/* RP */
   if (buf == NULL)
     return 0;
 
@@ -675,8 +675,8 @@ searchbox (char *str)
 
       if (IS_SCAN_F1(ev.scan))	// F1 for help screen */
 	{
-	  char *buf2 = malloc (w * height * 2);	/* RP */
-	  if (buf == NULL)
+	  char *buf2 = malloc (savewindowsize(w, height));	/* RP */
+	  if (buf2 == NULL)
 	    return 0;
 
 	  save_window (x + 1, y + 1, w, height, buf2);

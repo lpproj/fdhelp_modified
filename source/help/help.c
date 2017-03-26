@@ -257,7 +257,7 @@ main (int argc, char *argv[])
 
   if (forcemono == 0)
     {
-      oldscreen = malloc (W * H * 2);
+      oldscreen = malloc (savewindowsize (W, H));
       if (oldscreen)
 	save_window (X, Y, W, H, oldscreen);
     }

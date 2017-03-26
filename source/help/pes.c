@@ -70,7 +70,7 @@ pesListAdd (const char *fullpath, const char *homepage)
   /* Create a buffer for screen information */
   /* delete old pes structures if necessary */
   /* The 512 bytes are for pes->text_holder */
-  while ((newpes->screen_buf = (char *) malloc (H * W * 2 + 512)) == NULL)
+  while ((newpes->screen_buf = (char *) malloc (savewindowsize(H, W) + 512)) == NULL)
     if (pesListDeleteOldest ())
       {
 	show_error (hcatMemErr);
@@ -143,7 +143,7 @@ pesListAdd2 (int space, const char *fullpath)
   /* Create a buffer for screen information */
   /* delete old pes structures if necessary */
   /* The 512 bytes are for pes->text_holder */
-  while ((newpes->screen_buf = (char *) malloc (H * W * 2 + 512)) == NULL)
+  while ((newpes->screen_buf = (char *) malloc (savewindowsize(H, W) + 512)) == NULL)
     if (pesListDeleteOldest ())
       {
 	show_error (hcatMemErr);

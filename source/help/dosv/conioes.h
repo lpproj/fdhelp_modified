@@ -120,6 +120,7 @@ extern unsigned char const IsDOSVText;
 #define cursor_wherex()	(1 + *(unsigned char far *)MK_FP(0x40, 0x50 + (curvideopage()*2)))
 #define cursor_wherey()	(1 + *(unsigned char far *)MK_FP(0x40, 0x51 + (curvideopage()*2)))
 
+#define savewindowsize(w,h)  ((unsigned)(w) * (unsigned char)(h) * 2U)
 
 #ifdef __cplusplus
 extern "C"
