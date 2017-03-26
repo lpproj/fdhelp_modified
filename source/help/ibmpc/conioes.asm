@@ -42,7 +42,11 @@ PUBLIC	_conio_exit
 PUBLIC	_show_mouse
 PUBLIC	_hide_mouse
 PUBLIC	_move_mouse
+IF 1
+PUBLIC	_cursor_type
+ELSE
 PUBLIC	_cursor_size
+ENDIF
 PUBLIC	_move_cursor
 PUBLIC	_get_event
 PUBLIC	_write_char
@@ -300,6 +304,37 @@ _move_cursor	PROC
 _move_cursor	ENDP
 
 
+IF 1
+_cursor_type	PROC
+
+	typ	EQU	[bp+06h]
+
+		push	bp
+		mov	bp, sp
+		mov	ax, typ
+		mov	cx, 2000h	; erase
+		test	ax, ax
+		jz	@@setcur
+		push	ds
+		mov	cx, 40h
+		mov	ds, cx
+		cmp	word ptr ds:[0063h], 03B4h
+		pop	ds
+		mov	cx, 0607h	; CGA normal
+		jne	@@cursize2
+		mov	cx, 0D0Eh	; MDA normal
+    @@cursize2:
+		cmp	al, 1		; CURSOR_FULL?
+		jne	@@setcur
+		mov	ch, 0
+    @@setcur:
+		mov	ah, 01h
+		int	10h
+		pop	bp
+		retf
+
+_cursor_type	ENDP
+ELSE
 _cursor_size	PROC
 
       Bottom	EQU	[bp+08h]
@@ -308,14 +343,15 @@ _cursor_size	PROC
 		push	bp
 		mov	bp, sp
 		mov	ah, 01
-		mov	cl, Top
-		mov	ch, Bottom
+		mov	ch, Top
+		mov	cl, Bottom
 		and	cx, 1F1Fh
 		int	10h
 		pop	bp
 		retf
 
 _cursor_size	ENDP
+ENDIF
 
 
 ;----------------------------------------------------------------

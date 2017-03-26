@@ -30,7 +30,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <conio.h>
 #if defined(__TURBOC__)
 # include <alloc.h>
 # include <dir.h>
@@ -62,7 +61,7 @@ main (int argc, char *argv[])
 
   char *showcommand = 0;
   char *oldscreen;
-  int oldcursorx = wherex (), oldcursory = wherey ();
+  int oldcursorx = cursor_wherex (), oldcursory = cursor_wherey ();
   int i;			/* counter for loop */
   int forcemono = 0, fancyscheme = 0;
   int AsciiExtendedChars = DEFAULT_ASCII_EXTENDED_CHARS;

@@ -17,10 +17,8 @@
 #else
 # include <malloc.h>
 #endif
-#include <conio.h>
 #define HELP_GUI_C
 #include "help_gui.h"
-#include "conioes.h"
 #include "catdefs.h"
 
 /* F U N C T I O N S *******************************************************/
@@ -496,7 +494,7 @@ searchbox (char *str)
   writeButton (White + BakBlue, x + 6, y + 10, hcatButtonOK);
   writeButton (White + BakBlue, x + 16, y + 10, hcatButtonCancel);
   writeButton (White + BakBlue, x + 26, y + 10, hcatButtonHelp);
-  _setcursortype (_NORMALCURSOR);
+  cursor_type (CURSOR_NORMAL);
 
   i = 0;
   str[0] = 0;
@@ -714,7 +712,7 @@ searchbox (char *str)
 	}
     }
 
-  _setcursortype (_NOCURSOR);
+  cursor_type (CURSOR_ERASE);
   load_window (x, y, w, height, buf);
   free (buf);			/* RP */
   return i;

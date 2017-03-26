@@ -9,7 +9,7 @@
 #ifndef HELP_GUI_H_INCLUDED
 #define HELP_GUI_H_INCLUDED
 
-#include "conio.h"
+#include "conioes.h"
 
 #define X (1)
 #define Y (1)

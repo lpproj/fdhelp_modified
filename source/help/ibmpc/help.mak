@@ -129,8 +129,14 @@ $(OPATH)utfcp.obj: $(SPATH)utfcp.c
 $(OPATH)kitten.obj: $(CATSPATH)kitten.c
 	$(CC) $(CFLAGS) -I$(CATSPATH)  -c -o$< $(CATSPATH)kitten.c
 
+# tasm
+$(OPATH)conioes.obj: conioes.asm
+	$(RM) $<
+	$(AS) $(ASFLAGS) conioes.asm,$<
+
+# ml.exe (masm 6)
 #$(OPATH)conioes.obj: conioes.asm
-#	$(AS) $(AFLAGS) $<, conioes.obj
+#	$(AS) $(ASFLAGS) -Fo$< conioes.asm
 
 
 $(OBJS_RSP): $(OBJS) $(OBJS_C)

@@ -113,6 +113,14 @@ extern unsigned char const IsDOSVText;
 #define COLOR_MODE 0
 #define MONO_MODE  1
 
+#define CURSOR_ERASE 0
+#define CURSOR_NORMAL 2
+
+#define curvideopage() (*(unsigned char far *)MK_FP(0x40, 0x62))
+#define cursor_wherex()	(1 + *(unsigned char far *)MK_FP(0x40, 0x50 + (curvideopage()*2)))
+#define cursor_wherey()	(1 + *(unsigned char far *)MK_FP(0x40, 0x51 + (curvideopage()*2)))
+
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -131,7 +139,11 @@ extern "C"
   void __CON_FUNC hide_mouse (void);
   void __CON_FUNC move_mouse (int x, int y);
   void __CON_FUNC move_cursor (int x, int y);
+#if 1
+  void __CON_FUNC cursor_type (int typ);
+#else
   void __CON_FUNC cursor_size (int top, int bottom);
+#endif
   void __CON_FUNC get_event (struct event __CON_DATA * ev, int flags);
   void __CON_FUNC write_char (int attr, int x, int y, int ch);
   void __CON_FUNC write_string (int attr, int x, int y,
