@@ -110,7 +110,7 @@ simpleTagSubstitutions (struct eventState *pes, tagSubsEntry * tagSubsTable)
 
 	         memmove (tptr + lenafter,
                      tptr + lenbefore,
-                     tptrlen - lenbefore);
+                     tptrlen - lenbefore + 1);
          }
          else if (diff < 0)
          {
