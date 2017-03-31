@@ -46,6 +46,16 @@ extern unsigned char BORDER_TEXT_COLOR;
 extern unsigned char LINK_COLOR;
 extern unsigned char LINK_HIGHLIGHTED_COLOR;
 
+#if defined(NEC98)
+/* COLOR MONITOR SCHEME (NEC98) */
+#define C_TEXT_COLOR             (White    + BakBlack)
+#define C_BOLD_COLOR             (BrWhite  + BakBlack)
+#define C_ITALIC_COLOR           (Magenta  + BakBlack)
+#define C_BORDER_COLOR           (Cyan     + BakBlack)
+#define C_BORDER_TEXT_COLOR      (Yellow   + BakBlack)
+#define C_LINK_COLOR             (Yellow   + BakBlack)
+#define C_LINK_HIGHLIGHTED_COLOR (Black    + BakWhite)
+#else
 /* COLOR MONITOR SCHEME */
 #define C_TEXT_COLOR             (White    + BakBlack)
 #define C_BOLD_COLOR             (BrWhite  + BakBlack)
@@ -54,6 +64,7 @@ extern unsigned char LINK_HIGHLIGHTED_COLOR;
 #define C_BORDER_TEXT_COLOR      (Yellow   + BakBlack)
 #define C_LINK_COLOR             (Yellow   + BakBlack)
 #define C_LINK_HIGHLIGHTED_COLOR (Black    + BakWhite)
+#endif
 
 /* MONO MONITOR SCHEME */
 #define M_TEXT_COLOR             (White    + BakBlack)

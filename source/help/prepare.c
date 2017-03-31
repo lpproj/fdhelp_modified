@@ -40,7 +40,7 @@ preparepes (struct eventState *pes)
   wordwrap (pes->text_buf);
   sensiblebreaks (pes->text_buf);
 
-  pes->text_holder = pes->screen_buf + H * W * 2;
+  pes->text_holder = pes->screen_buf + savewindowsize (H, W);
 
   preparebodyinfo (pes);
 
@@ -68,7 +68,7 @@ void
 searchpreparepes (struct eventState *pes)
 {
   tags2lwr (pes->text_buf);
-  pes->text_holder = pes->screen_buf + H * W * 2;
+  pes->text_holder = pes->screen_buf + savewindowsize (H, W);
   preparebodyinfo (pes);
 }
 

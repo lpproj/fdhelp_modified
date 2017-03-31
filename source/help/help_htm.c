@@ -628,7 +628,7 @@ displayProcess (struct eventState *pes)
 		      str[j++] = tmp[i];
 		      str[j++] = col[i];
 		    }
-		  load_window (X + 2, Y + 1 + line, LEN, 1, str);
+		  write_charattrs_to_window (X + 2, Y + 1 + line, LEN, 1, str);
 		}
 
 	      line++;

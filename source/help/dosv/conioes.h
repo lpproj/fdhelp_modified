@@ -159,6 +159,8 @@ extern "C"
   void __CON_FUNC border_window (int attr, int x, int y, int w, int h,
 				 const char __CON_DATA * border);
 
+#define write_charattrs_to_window	load_window
+
 #ifdef __cplusplus
 }
 #endif

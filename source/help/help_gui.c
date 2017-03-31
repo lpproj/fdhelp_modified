@@ -661,16 +661,16 @@ searchbox (char *str)
 	  break;
 	}
 
-      if (ev.key == 9)		/* Tab */
-	{
-	  if ((focus++) == SEARCH_LASTFOCUS)
-	    focus = SEARCH_FIRSTFOCUS;
-	}
-
+      /* sava: check Shift+Tab before (unshifted) TAB for NEC98 */
       if (IS_SCAN_SHIFT_TAB(ev.scan))	/* Shift+Tab */
 	{
 	  if ((focus--) == SEARCH_FIRSTFOCUS)
 	    focus = SEARCH_LASTFOCUS;
+	}
+      else if (ev.key == 9)		/* Tab */
+	{
+	  if ((focus++) == SEARCH_LASTFOCUS)
+	    focus = SEARCH_FIRSTFOCUS;
 	}
 
       if (IS_SCAN_F1(ev.scan))	// F1 for help screen */

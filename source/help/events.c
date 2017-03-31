@@ -67,10 +67,10 @@ processEvents (struct eventState *pes)
 	}
       else if (ev.key == 27)
 	return NAVIGATE_BACK;	/* Escape Key */
+      else if (IS_SCAN_SHIFT_TAB(ev.scan) || IS_SCAN_LEFT(ev.scan))
+	shifttabkey (pes); /* check Shift+Tab before Tab for NEC98 */
       else if (ev.key == 9 || IS_SCAN_RIGHT(ev.scan))
 	tabkey (pes);
-      else if (IS_SCAN_SHIFT_TAB(ev.scan) || IS_SCAN_LEFT(ev.scan))
-	shifttabkey (pes);
       else if (IS_SCAN_DOWN(ev.scan))
 	downkey (pes);
       else if (IS_SCAN_UP(ev.scan))
