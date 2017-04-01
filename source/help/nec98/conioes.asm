@@ -38,6 +38,7 @@ OriginalTimer2	DW   ?	;
 cursordisped	db   ?	; 0=erase, 1=show
 mode40columns	db   ?	; 0=80cols, 1=40cols
 screencharstep	dw   ?	; 2=80cols, 4=40cols
+fkeystate	db   ?	; 0=none, 1=show fkey, 2=show (shifted)
 
 .CODE
 
@@ -110,6 +111,23 @@ cursor_type_n	PROC	NEAR
 @@esc_scr	db	1Bh, "[>5", 0
 cursor_type_n	ENDP
 
+; clear screen and redraw fkey status line
+clear_screen		PROC	NEAR
+		push	ds
+		mov	si, 60h
+		mov	ds, si
+		mov	si, offset @@clr_scrn20_s
+		cmp	byte ptr ds:[0113h], 0		; lines: 0=20, 1=25
+		jz	@@l2
+		mov	si, offset @@clr_scrn25_s
+    @@l2:
+		pop	ds
+		jmp	short puts_con		; call + retn
+    @@clr_scrn20_s	db	1Bh, "[>3h", 0
+    @@clr_scrn25_s	db	1Bh, "[>3l", 0
+clear_screen		ENDP
+
+erase_fkey_s	db	1Bh, "[>1h", 0
 
 ;----------------------------------------------------------------
 
@@ -139,6 +157,11 @@ _conio_init2	PROC
 		mov	_ScreenSegment, ax
 		;mov	_ScreenOffset, 0
 		
+
+		mov	al, byte ptr es:[0111h]
+		mov	fkeystate, al
+		mov	si, offset erase_fkey_s
+		call	puts_con
 
 		mov	al, byte ptr es:[0112h]
 		inc	al
@@ -211,6 +234,13 @@ _conio_exit2	PROC
 		push	di
 		push	si
 
+		push	es
+		mov	ax, 60h
+		mov	es, ax
+		mov	al, fkeystate
+		mov	byte ptr es:[0111h], al
+		pop	es
+		call	clear_screen
 		mov	al, cursordisped
 		call	cursor_type_n
 

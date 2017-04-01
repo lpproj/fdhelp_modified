@@ -321,12 +321,17 @@ main (int argc, char *argv[])
   html_view (showcommand, base_dir, home_page, help_page);
   free (showcommand);
   hide_mouse ();
+#if defined(NEC98)
+  conio_exit ();
+#endif
   if ((oldscreen != 0) && (forcemono == 0))
     {
       load_window (X, Y, W, H, oldscreen);
       free (oldscreen);
     }
+#if !defined(NEC98)
   conio_exit ();
+#endif
   move_cursor (oldcursorx, oldcursory);
 
   return 0;
