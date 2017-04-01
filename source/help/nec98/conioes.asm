@@ -161,7 +161,7 @@ _conio_init2	PROC
 		mov	al, byte ptr es:[0111h]
 		mov	fkeystate, al
 		mov	si, offset erase_fkey_s
-		call	puts_con
+		;call	puts_con
 
 		mov	al, byte ptr es:[0112h]
 		inc	al
