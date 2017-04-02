@@ -47,6 +47,8 @@
 # define DEFAULT_ASCII_EXTENDED_CHARS 1
 #endif
 
+extern void tagChangeAsciiChar(void);
+
 /* M A I N   M O D U L E ***************************************************/
 
 int
@@ -314,6 +316,7 @@ main (int argc, char *argv[])
       BarDownArrow = 'v';
       BarLeftArrow = '<';
       BarRightArrow = '>';
+      tagChangeAsciiChar();
     }
   show_mouse ();
   move_mouse (80, 25);

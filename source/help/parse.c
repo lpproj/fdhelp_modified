@@ -28,6 +28,22 @@
 #include "utfcp.h"
 #undef _PARSE_C_
 
+char TagSub_hr[] = "\n\n \xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4 \n\n";
+char TagSub_li[] = " \n\007 ";
+char H1Border[] = " \xDF\xDF\xDF \xDC"; /* " ßßß Ü"; */
+
+void tagChangeAsciiChar(void)
+{
+  unsigned i;
+
+  for(i=0; TagSub_hr[i]; ++i)
+    if (TagSub_hr[i] == '\xC4') TagSub_hr[i] = '-';
+
+  TagSub_li[1] = '*';
+  strcpy (H1Border, "--    ");
+}
+
+
 int ampSubsNCR (struct eventState *pes);
 
 int ampSubsInternal (struct eventState *pes,
@@ -228,10 +244,15 @@ headerTagSubstitution (struct eventState *pes)
 	    p[headerlength + 7] = *p;
 
 	  /* Now create the border */
-	  strncpy (pes->text_buf + difference, " Ü<br> ", 7);
-	  difference += 7;
-	  for (i = 1; i <= headerlength; i++)
-	    pes->text_buf[difference++] = 'ß';
+	  strncpy (pes->text_buf + difference, " Ü<br>", 6);
+	  pes->text_buf[difference] = H1Border[4];
+	  pes->text_buf[difference + 1] = H1Border[5];
+	  difference += 6;
+	  pes->text_buf[difference++] = H1Border[0];
+	  for (i = 2; i < headerlength; i++)
+	    pes->text_buf[difference++] = H1Border[1]; /* 'ß'; */
+	  pes->text_buf[difference++] = H1Border[2];
+	  pes->text_buf[difference++] = H1Border[3];
 	}
     }
 }

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "conioes.h"
+#include "parse.h"
 
 extern void __CON_FUNC conio_init2 (int force_mono);
 
@@ -18,6 +19,8 @@ void __CON_FUNC conio_init (int force_mono)
 		BarDownArrow = 0x07;
 		BarLeftArrow = 0x1f;
 		BarRightArrow = 0x1e;
+		tagChangeAsciiChar();
+		TagSub_li[1] = '\x0F'; /* '\x09'; '\xA5'; */
 	}
 	
 }

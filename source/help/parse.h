@@ -13,6 +13,10 @@
 /* Tag substition tables */
 /*************************/
 
+extern char TagSub_hr[];
+extern char TagSub_li[];
+extern char H1Border[];
+
 #define TST_ENTRY(b, a) {(b), (a)}
 
 struct tagSubsEntryStruct
@@ -30,8 +34,8 @@ static tagSubsEntry tagSubsTable1[] = {
 };
 
 static tagSubsEntry tagSubsTable2[] = {
-  TST_ENTRY ("<hr>",
-	     "\n\n 컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴 \n\n"),
+  TST_ENTRY ("<hr>", TagSub_hr
+	     /* "\n\n 컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴 \n\n" */),
   TST_ENTRY ("<strong", "<b"),
   TST_ENTRY ("</strong>", "</b>"),
   TST_ENTRY ("<code", "<b"),
@@ -43,7 +47,7 @@ static tagSubsEntry tagSubsTable2[] = {
   TST_ENTRY ("</ol>", "\n\n"),
   TST_ENTRY ("<ul>", "\n\n"),
   TST_ENTRY ("</ul>", "\n\n"),
-  TST_ENTRY ("<li>", " \n\007 "),
+  TST_ENTRY ("<li>", TagSub_li /* " \n\007 " */),
   TST_ENTRY ("<h2", "\n\n<b"),
   TST_ENTRY ("</h2>", "</b>\n"),
   TST_ENTRY ("<h3", "\n\n<b"),
