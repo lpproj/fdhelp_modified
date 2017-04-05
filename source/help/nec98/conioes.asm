@@ -38,7 +38,8 @@ OriginalTimer2	DW   ?	;
 cursordisped	db   ?	; 0=erase, 1=show
 mode40columns	db   ?	; 0=80cols, 1=40cols
 screencharstep	dw   ?	; 2=80cols, 4=40cols
-fkeystate	db   ?	; 0=none, 1=show fkey, 2=show (shifted)
+fkeystate	db   ?	; [0060:0111] 0=none, 1=show fkey, 2=show (shifted)
+fkeystate2	db   ?	; [0060:008C] ' '=normal '*'=shifted
 
 .CODE
 
@@ -75,6 +76,31 @@ Hide_Mouse	MACRO
 		int	33h
     @@nomouse2:
 		ENDM
+
+
+check_mouse_stat	PROC	NEAR
+		mov	ax, 3
+		xor	bx, bx
+		int	33h
+		; check NEC mouse.sys
+		cmp	ah, 0FFh
+		je	@@necmouse
+		cmp	bh, 0FFh
+		je	@@necmouse
+		ret
+    @@necmouse:
+		; int 33h AX=3
+		; NEC mouse.sys: return position and button status
+		;
+		; AX = left button (-1=pressed, 0=not pressed)
+		; BX = right button (-1=pressed, 0=not pressed)
+		; CX = X cood of pointer (by actual pixel)
+		; DX = Y cood of pointer (by actual pixel)
+		and	ax, 1
+		and	bx, 2
+		or	bx, ax
+		ret
+check_mouse_stat	ENDP
 
 
 
@@ -127,7 +153,25 @@ clear_screen		PROC	NEAR
     @@clr_scrn25_s	db	1Bh, "[>3l", 0
 clear_screen		ENDP
 
-erase_fkey_s	db	1Bh, "[>1h", 0
+
+showhide_fkey		PROC	NEAR
+		push	ax
+		push	si
+		mov	si, offset @@erase_fk
+		cmp	al, 0
+		je	@@l2
+		mov	si, offset @@show_fk
+    @@l2:
+		call	puts_con
+		pop	si
+		pop	ax
+		ret
+    @@erase_fk	db	1Bh, "[>1h", 0
+    @@show_fk	db	1Bh, "[>1l", 0
+showhide_fkey		ENDP
+
+
+
 
 ;----------------------------------------------------------------
 
@@ -160,8 +204,10 @@ _conio_init2	PROC
 
 		mov	al, byte ptr es:[0111h]
 		mov	fkeystate, al
-		mov	si, offset erase_fkey_s
-		;call	puts_con
+		mov	al, byte ptr es:[008Ch]
+		mov	fkeystate2, al
+		;mov	al, 0
+		;call	showhide_fkey
 
 		mov	al, byte ptr es:[0112h]
 		inc	al
@@ -181,32 +227,55 @@ _conio_init2	PROC
 		mov	al, 0
 		call	cursor_type_n
 
+		; check if int 33h is safe to call
+		xor	ax, ax
+		push	ds
+		mov	ds, ax
+		mov	ax, word ptr ds:[0033h * 4 + 2]
+		pop	ds
+		cmp	ax, 60h
+		je	@@no_mouse
+		cmp	ax, 0
+		je	@@no_mouse
+		
 		mov	ax,0000h	; Check for a mouse
+		mov	bx, 0
 		int	33h
+		; result:
+		;  AX==-1 mouse driver is installed
+		;  BX==0  NEC mouse.sys (guess 2 buttons)
+		;  BX!=0  number of buttons (MS mouse.com)
+		;  BX==-1 probably 2 buttons (MS mouse.com)
 		cmp	ax, 0h
 		je	@@No_Mouse
-		cmp	ax, 3h
-		je	@@_Mouse
-		cmp	ax, 2h
-		je	@@_Mouse
-		cmp	ax, 0FFFFh
-		mov	ax, 2h
-		je	@@_Mouse
-		mov	ax, 1h
     @@_Mouse:
 		mov	_MouseInstalled, 1
-		mov	ax, 0003h	; Reset mouse
-		int	33h
+		;mov	ax, 0003h
+		;int	33h
+		call	check_mouse_stat
 		mov	_LastMousePosX, cx
 		mov	_LastMousePosY, dx
 		mov	_LastMouseBtns, bx
 
         mov _WheelSupported, 0
+IF 0
+		; ctmouse extension:
+		; int 33h AX=11h: Check wheel support and get capabilities flags
+		; (conflict with NEC mouse.sys)
+		;
+		; NEC mouse.sys:
+		; int 33h AX=10h: define horizontal range by pixel
+		;   CX = minimum range by pixel (0 as default)
+		;   DX = maximun range by pixel (639 as default)
+		; int 33h AX=11h: define vertical range by pixel
+		;   CX = minimum range by pixel (0 as default)
+		;   DX = maximum range by pixel (399 as default)
         mov ax, 0011h
         int 33h
         cmp ax, 574Dh
         jne @@skip2
         mov _WheelSupported, 1
+ENDIF
 
         jmp @@skip2
     @@No_Mouse:
@@ -228,19 +297,25 @@ _conio_init2	ENDP
 ;----------------------------------------------------------------
 
 _conio_exit2	PROC
+
 		push	bp
 		mov	bp, sp
 		push	ds
 		push	di
 		push	si
 
+		Hide_Mouse
+
 		push	es
 		mov	ax, 60h
 		mov	es, ax
-		mov	al, fkeystate
+		; restore status line
 		mov	byte ptr es:[0111h], al
+		mov	ah, fkeystate2
+		mov	byte ptr es:[008Ch], ah
 		pop	es
 		call	clear_screen
+		; restore cursor status
 		mov	al, cursordisped
 		call	cursor_type_n
 
@@ -533,20 +608,37 @@ _move_mouse	PROC
 
 		push	bp
 		mov	bp, sp
-		mov	ax, 0004h
 		mov	cx, X
 		mov	dx, Y 
 
+		cmp	cl, 0
+		je	@@x2
+		mov	al, _ScreenWidth
+		cmp	cl, al
+		jbe	@@x
+		mov	cl, al
+    @@x:
 		dec	cx
+    @@x2:
 		shl	cx, 1
 		shl	cx, 1
 		shl	cx, 1
 
+		cmp	dl, 0
+		je	@@y2
+		mov	al, _ScreenHeight
+		cmp	dl, al
+		jbe	@@y
+		mov	dl, al
+    @@y:
 		dec	dx
+    @@y2:
+		shl	dx, 1
 		shl	dx, 1
 		shl	dx, 1
 		shl	dx, 1
 
+		mov	ax, 0004h
 		int	33h
 		pop	bp
 		retf
@@ -1190,8 +1282,9 @@ ENDIF
 		cmp	_MouseInstalled, 1
 		jne	@@test_time
 
-		mov	ax, 0003h		; Check mouse status
-		int	33h
+		;mov	ax, 0003h		; Check mouse status
+		;int	33h
+		call	check_mouse_stat
 		cmp	bx, _LastMouseBtns
 		jne	@@mouse
 		cmp	cx, _LastMousePosX
@@ -1241,14 +1334,18 @@ ENDIF
     		cmp	_MouseInstalled, 1
     		jne	@@end
 
-		mov	ax, 0003h	; Update mouse status
-		int	33h
+		;mov	ax, 0003h	; Update mouse status
+		;int	33h
+		call	check_mouse_stat
 
+		; mouse x = (cx / 8) + 1
 		shr	cx, 1
 		shr	cx, 1
 		shr	cx, 1
 		inc	cx
 		mov	x, cx
+		; mouse y = (cx / 16) + 1
+		shr	dx, 1
 		shr	dx, 1
 		shr	dx, 1
 		shr	dx, 1

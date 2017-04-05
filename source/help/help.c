@@ -332,7 +332,9 @@ main (int argc, char *argv[])
       load_window (X, Y, W, H, oldscreen);
       free (oldscreen);
     }
-#if !defined(NEC98)
+#if defined(NEC98)
+  hide_mouse ();
+#else
   conio_exit ();
 #endif
   move_cursor (oldcursorx, oldcursory);
