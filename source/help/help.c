@@ -326,15 +326,17 @@ main (int argc, char *argv[])
   hide_mouse ();
 #if defined(NEC98)
   conio_exit ();
-#endif
+  if ((oldscreen != 0) && (forcemono == 0))
+    {
+      load_window (X, Y, W, ScreenHeight2, oldscreen);
+      free (oldscreen);
+    }
+#else
   if ((oldscreen != 0) && (forcemono == 0))
     {
       load_window (X, Y, W, H, oldscreen);
       free (oldscreen);
     }
-#if defined(NEC98)
-  hide_mouse ();
-#else
   conio_exit ();
 #endif
   move_cursor (oldcursorx, oldcursory);

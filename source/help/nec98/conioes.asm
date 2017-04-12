@@ -15,6 +15,7 @@ PUBLIC	_ScreenHeight
 PUBLIC	_MouseInstalled
 PUBLIC  _WheelSupported
 PUBLIC  _MonoOrColor    ; Added by RP. Mono=1, Color = 0.
+PUBLIC	_ScreenHeight2
 
 _MonoOrColor    DB   ?  ; Added by RP
 oldvidmod       DB   ?  ; Added by RP
@@ -40,6 +41,7 @@ mode40columns	db   ?	; 0=80cols, 1=40cols
 screencharstep	dw   ?	; 2=80cols, 4=40cols
 fkeystate	db   ?	; [0060:0111] 0=none, 1=show fkey, 2=show (shifted)
 fkeystate2	db   ?	; [0060:008C] ' '=normal '*'=shifted
+_ScreenHeight2	db   ?
 
 .CODE
 
@@ -206,8 +208,11 @@ _conio_init2	PROC
 		mov	fkeystate, al
 		mov	al, byte ptr es:[008Ch]
 		mov	fkeystate2, al
-		;mov	al, 0
-		;call	showhide_fkey
+		mov	al, byte ptr es:[0112h]
+		inc	al
+		mov	_ScreenHeight2, al
+		mov	al, 0
+		call	showhide_fkey
 
 		mov	al, byte ptr es:[0112h]
 		inc	al
@@ -305,11 +310,13 @@ _conio_exit2	PROC
 		push	si
 
 		Hide_Mouse
+		mov	_MouseInstalled, 0
 
 		push	es
 		mov	ax, 60h
 		mov	es, ax
 		; restore status line
+		mov	al, fkeystate
 		mov	byte ptr es:[0111h], al
 		mov	ah, fkeystate2
 		mov	byte ptr es:[008Ch], ah

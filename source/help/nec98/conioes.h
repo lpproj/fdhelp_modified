@@ -101,6 +101,7 @@ extern unsigned char const ScreenHeight;
 extern unsigned int const MouseInstalled;
 extern unsigned int const WheelSupported;
 extern unsigned char const MonoOrColor;
+extern unsigned char const ScreenHeight2;
 
 #define COLOR_MODE 0
 #define MONO_MODE  1
