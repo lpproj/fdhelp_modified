@@ -22,7 +22,7 @@ int mblen_loose(const char *);
 
 #else /* !defined(DBCS) */
 
-#define isDBCSLead(p) (1)
+#define isDBCSLead(p) (0)
 #define mblen_loose(p) (1)
 
 
