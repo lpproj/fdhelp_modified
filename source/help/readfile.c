@@ -48,11 +48,11 @@ readUncompressedFile (const char *filename)
   /* determine the length of file using standard file i/o. -RP
    */
   fseek (f, 0L, SEEK_END);
-  l = min (ftell (f), 0xFFFEU);
+  l = min (ftell (f), (0xFFFEU - TEXT_BUF_MARGIN));
   fseek (f, 0L, SEEK_SET);
 
   /* Allocate memory for file text buffer */
-  while ((text_buf = (char *) malloc (l + 1)) == NULL)
+  while ((text_buf = (char *) malloc (l + TEXT_BUF_MARGIN + 1)) == NULL)
     if (pesListDeleteOldest ())
       {
 	show_error (hcatMemErr);
@@ -83,12 +83,12 @@ readZipFile (unzFile * handle)
 
   /* determine the length of file */
   unzGetCurrentFileInfo (handle, &info, NULL, 0, NULL, 0, NULL, 0);
-  l = min (info.uncompressed_size, 65530L);
+  l = min (info.uncompressed_size, 65530L - TEXT_BUF_MARGIN);
   if (l == 0)
     return NULL;
 
   /* Allocate memory for file text buffer */
-  while ((text_buf = (char *) malloc (l + 1)) == NULL)
+  while ((text_buf = (char *) malloc (l + TEXT_BUF_MARGIN + 1)) == NULL)
     if (pesListDeleteOldest ())
       {
 	show_error (hcatMemErr);

@@ -8,4 +8,6 @@
 
 char *readfile (const char *filename, const char *homepage);
 
+#define TEXT_BUF_MARGIN 1024
+
 #endif

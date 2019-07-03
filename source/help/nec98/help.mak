@@ -2,7 +2,7 @@
 # with Turbo C 2.0/Turbo C++ 1.01
 
 CC = tcc
-CFLAGS = -ml -O -f- -I. -I.. -DNEC98
+CFLAGS = -ml -O -f- -I. -I.. -DNEC98 -DDBCS
 LD = tcc
 LDFLAGS = -ml -f-
 AS = tasm
@@ -65,7 +65,10 @@ OBJS_C = \
 	$(OPATH)conioesn.obj \
 	$(OPATH)conioes.obj 
 
-OBJS = $(OBJS01) $(OBJS02) $(OBJS03) $(OBJS04) $(OBJS05) $(OBJS_CAT)
+OBJS_D = \
+	$(OPATH)dbcs.obj
+
+OBJS = $(OBJS01) $(OBJS02) $(OBJS03) $(OBJS04) $(OBJS05) $(OBJS_CAT) $(OBJS_D)
 
 OBJS_RSP = objs.rsp
 
@@ -79,7 +82,7 @@ clean:
 	$(RM) $(OBJS03)
 	$(RM) $(OBJS04)
 	$(RM) $(OBJS05)
-	$(RM) $(OBJS_C) $(OBJS_CAT)
+	$(RM) $(OBJS_C) $(OBJS_CAT) $(OBJS_D)
 	$(RM) $(OBJS_RSP) help.exe help_upx.exe
 
 
@@ -137,6 +140,9 @@ $(OPATH)kitten.obj: $(CATSPATH)kitten.c
 $(OPATH)conioesn.obj: conioesn.c
 	$(CC) $(CFLAGS) -c -o$< conioesn.c
 
+$(OPATH)dbcs.obj: $(SPATH)dbcs.c
+	$(CC) $(CFLAGS) -c -o$< $(SPATH)dbcs.c
+
 
 # tasm
 $(OPATH)conioes.obj: conioes.asm
@@ -155,7 +161,7 @@ $(OBJS_RSP): $(OBJS) $(OBJS_C)
 	$(ECHOTO) -a $(OBJS_RSP) $(OBJS03)
 	$(ECHOTO) -a $(OBJS_RSP) $(OBJS04)
 	$(ECHOTO) -a $(OBJS_RSP) $(OBJS05)
-	$(ECHOTO) -a $(OBJS_RSP) $(OBJS_C) $(OBJS_CAT)
+	$(ECHOTO) -a $(OBJS_RSP) $(OBJS_C) $(OBJS_CAT) $(OBJS_D)
 	$(ECHOTO) -a $(OBJS_RSP) $(LIBS)
 
 

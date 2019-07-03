@@ -17,6 +17,10 @@
 #endif
 #include <dos.h>
 
+#if defined(DBCS)
+# include "readfile.h"
+# include "dbcs.h"
+#endif
 #include "pes.h"
 #include "help.h"
 #include "help_gui.h"
@@ -347,6 +351,9 @@ wordwrap (char *text)
    */
   int i, intag, inentity;
   char *tptr, *lastspace;
+#if defined(DBCS)
+  unsigned n_insert = 0;
+#endif
 
   tptr = strstr (text, "<body");
   if (tptr == 0)
@@ -402,9 +409,33 @@ wordwrap (char *text)
 	      break;
 	    }
 
+#if defined(DBCS)
+          if (!intag && !inentity)
+            {
+              int n = mblen_loose (tptr);
+              if (i+n >= LEN && n_insert < TEXT_BUF_MARGIN)
+                {
+                  unsigned tlen = strlen (tptr) + 1;
+                  while (tlen--)
+                    tptr[tlen] = tptr[tlen - 1];
+                  *tptr++ = '\n';
+                  ++n_insert;
+                  lastspace = 0;
+                  i = -1;
+                }
+              else
+                {
+                  i += n;
+                  tptr += n;
+                }
+            }
+          else
+            ++tptr;
+#else
 	  ++tptr;
 	  if (!intag && !inentity)
 	    ++i;
+#endif
 	}
 
       if (lastspace != 0)
