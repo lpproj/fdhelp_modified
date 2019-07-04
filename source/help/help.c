@@ -483,8 +483,8 @@ show_usage (void)
 #if defined(HTML_HELP_FIXLEVEL)
 	  " " HTML_HELP_FIXLEVEL
 #endif
-	  "\n\n"
-	  "HELP [options] [topic]\n\n",
+	  "\n"
+	  "Usage: HELP [options] [topic]\n\n",
 	  hcatBasicOptions, ":\n"
 	  "  topic            ", hcatUsageTopic, "\n"
 	  "  /?               ", hcatUsageQMark, "\n"
