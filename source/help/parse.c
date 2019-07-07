@@ -415,9 +415,11 @@ wordwrap (char *text)
               int n = mblen_loose (tptr);
               if (i+n >= LEN && n_insert < TEXT_BUF_MARGIN)
                 {
-                  unsigned tlen = strlen (tptr) + 1;
-                  while (tlen--)
-                    tptr[tlen] = tptr[tlen - 1];
+                  unsigned tzlen = strlen (tptr) + 1;
+                  do
+                    {
+                      tptr[tzlen] = tptr[tzlen - 1];
+                    } while (--tzlen);
                   *tptr++ = '\n';
                   ++n_insert;
                   lastspace = 0;
