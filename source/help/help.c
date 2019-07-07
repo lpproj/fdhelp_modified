@@ -22,7 +22,7 @@
 /* Version: Use this to keep the /? command's display of the version up to
             date. Enclose within double-quotes. */
 #define HTML_HELP_VERSION "5.3.3"
-#define HTML_HELP_FIX     "fix2"
+#define HTML_HELP_FIX     "fix2a"
 #if defined(DBCS)
 # define HTML_HELP_FIXLEVEL  HTML_HELP_FIX "_dbcs"
 #else
